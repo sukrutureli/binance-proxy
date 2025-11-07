@@ -5,8 +5,16 @@ app = Flask(__name__)
 
 @app.route('/<path:path>', methods=['GET', 'POST'])
 def proxy(path):
-    base_url = "https://" + path.split('/')[0]
-    sub_path = '/'.join(path.split('/')[1:])
+    # İstek "fapi/..." veya "api/..." ile başlıyorsa doğru Binance endpoint’ine yönlendir
+    if path.startswith("fapi/"):
+        base_url = "https://fapi.binance.com"
+        sub_path = path[len("fapi/"):]
+    elif path.startswith("api/"):
+        base_url = "https://api.binance.com"
+        sub_path = path[len("api/"):]
+    else:
+        return {"error": "Invalid path"}, 400
+
     target_url = f"{base_url}/{sub_path}"
 
     try:
