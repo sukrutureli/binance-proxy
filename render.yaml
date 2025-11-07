@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: binance-proxy
+    env: python
+    buildCommand: ""
+    startCommand: "python proxy.py"
+    plan: free
+    autoDeploy: true
+    envVars: []
